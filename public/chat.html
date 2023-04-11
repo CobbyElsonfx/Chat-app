@@ -25,8 +25,19 @@
           <h3><i class="fas fa-users"></i> Users</h3>
           <ul id="users"></ul>
         </div>
-        <div class="chat-messages"></div>
+        <div class="chat-messages">
+          <div class="message">
+            <p class="meta">Mary <span>9:15pm</span></p>
+            <p class="text">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi 
+            </p>
+          </div>
+        </div>
+
+        
       </main>
+
+
       <div class="chat-form-container">
         <form id="chat-form">
           <input
@@ -47,6 +58,7 @@
       crossorigin="anonymous"
     ></script>
     <!-- this gives us access to the frontend -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.1/qs.min.js" integrity="sha512-5Zv/hNtOKSkeScnIYOqGjng82gQSHsCoyqq9TgrJLgYa032cUYWH4kF1ayS8Gz1Jfge7e8MaBF6AeEvoQ92v8w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
   </body>

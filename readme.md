@@ -24,14 +24,68 @@ Features
     Displays when a user joins or leaves the chat room
     Option to choose a username
 
-Technologies Used
+##  Technologies Used
 
     Node.js
     Express
     Socket.io
     HTML/CSS
 
-Credits
+## Things I learn during this tutorial
+1. Setting up a connection with Socket.io
+   a. Set up a normal express server. 
+      i. Require the express  module and save it the variable express
+           `
+           const express = require("express")
+
+           `  
+      ii. Create an instance of the express called app
+           `
+          const express = require("express")
+           const  app = express()
+           `
+      iii. require the file module which will enable you to read static files(public directory )
+
+           `
+           const express = require("express")
+           const  app = express()
+
+           const  path = require("path")
+           `
+       iv. Set up a port you can listen  as your server on  your local maching 
+       NB:The process.env.PORT checks if  there is any PORT  availbale  in the env file if not is uses the default port set for it
+           `
+           const express = require("express")
+           const  app = express()
+           const  path = require("path")
+
+           const port = process.env.PORT || 3000
+
+           app.use(express.static(path(_dirname,"public")))
+           `
+        v. Start the server
+          `app.listen(port, ()=>{
+            console.log(`server started on Port ${port}`)
+          })
+          `
+         
+      b. In oder to set up a bidirectional connection with socket.io which is built on top of  websocket
+         i. Require the node module http for setting up http connection
+         ii. Require and create a websocket function called io
+
+         `
+         const server = http.createServer(app)
+         const io = socketio(server)
+         
+         `
+        
+
+
+
+       c. the qs cdn library can can be used to grab the contents of a url
+
+
+##  Credits
 
 This project was created following the tutorial from Traversy Media on YouTube.
 License
