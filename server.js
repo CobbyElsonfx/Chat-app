@@ -4,6 +4,7 @@ const http = require("http")
 const socketio = require("socket.io")
 const port = process.env.PORT || 3000  // lookes if we have an environment variable name called Port and uses that 
 const {formatMessages} = require("./utils/messages")
+const {userJoin,getCurrentUser } = require("./utils/users") 
 
 //create a variable called app and set it to express
 const app = express()
@@ -26,19 +27,32 @@ const io = socketio(server) //create and install of a websocket function called 
 const defaultUser = "Chat bot"
 
 io.on("connection", socket =>{
-    console.log("New Websocket connection")
-    //emit message
-    socket.emit("message", formatMessages(defaultUser , "Welcome to Chat Cord"))  // only the client that is connection
-    socket.broadcast.emit("message", "A user has joined the chat") //emit to all clients except the user
-    socket.on("diconnect", ()=>{
-        io.emit("message", formatMessages(defaultUser, "A user has joined the Chat Cord"))
+    socket.on("joinRoom", ({username,room})=>{
+    const user = userJoin(socket.id,username,room)
+
+    socket.join(user.room)
+
+
+     socket.emit("message", formatMessages(defaultUser , "Welcome to Chat Cord"))  // only the client that is connection
+    socket.broadcast.to(user.room).emit("message",  formatMessages(defaultUser , `${user.username} has joined the chats`)) //emit to all clients except the user
+
     })
+    //emit message
+    
+   
     
     //listen to chatmessage event and emit it back to the client as message // and this will pass through the listening functio in the mainjs
     socket.on("chatMessage" , (msg)=>{
-        io.emit("message", formatMessages("user", msg) )
+
+        const users = getCurrentUser(socket.id)
+        console.log("I am user",users)
+        io.to(users.room).emit("message", formatMessages(users.username, msg) )
     })
-})
+    socket.on("diconnect", ()=>{
+        const user = userJoin(socket.id,username,room)
+        io.to(user.room).emit("message", formatMessages(defaultUser, `${user.username} user has left the Chat Cord`))
+    })
+})   
 
 
 
