@@ -4,7 +4,7 @@ const http = require("http")
 const socketio = require("socket.io")
 const port = process.env.PORT || 3000  // lookes if we have an environment variable name called Port and uses that 
 const {formatMessages} = require("./utils/messages")
-const {userJoin,getCurrentUser } = require("./utils/users") 
+const {userJoin,getCurrentUser,userLeave , getRoomUsers} = require("./utils/users") 
 
 //create a variable called app and set it to express
 const app = express()
@@ -33,26 +33,36 @@ io.on("connection", socket =>{
     socket.join(user.room)
 
 
-     socket.emit("message", formatMessages(defaultUser , "Welcome to Chat Cord"))  // only the client that is connection
+    socket.emit("message", formatMessages(defaultUser , "Welcome to Chat Cord"))  // only the client that is connection
     socket.broadcast.to(user.room).emit("message",  formatMessages(defaultUser , `${user.username} has joined the chats`)) //emit to all clients except the user
+    //send users room and its users
+    //The code you provided is emitting a socket event called "roomUsers" to all clients connected to the socket.io server, specifically to all clients in the same room as the user who triggered the event. The event payload contains an object with two properties: "room", which is the name of the room, and "users", which is an array of user objects in the 
+    //room. The "getRoomUsers" function is being called to retrieve the list of users in the room.
+    io.to(user.room).emit("userRoom", {
+        room: user.room,
+        activeUsers: getRoomUsers(room) //checkts for the presents of the users in the passed room and it returns an array of users
+    })
 
     })
+
     //emit message
     
    
     
-    //listen to chatmessage event and emit it back to the client as message // and this will pass through the listening functio in the mainjs
+    //listen to chatmessage event and emit it back to the client as message // and this will pass through the listening function in the mainjs
     socket.on("chatMessage" , (msg)=>{
-
         const users = getCurrentUser(socket.id)
-        console.log("I am user",users)
         io.to(users.room).emit("message", formatMessages(users.username, msg) )
     })
-    socket.on("diconnect", ()=>{
-        const user = userJoin(socket.id,username,room)
-        io.to(user.room).emit("message", formatMessages(defaultUser, `${user.username} user has left the Chat Cord`))
+
+    socket.on("disconnect", ()=>{
+        const user = userLeave(socket.id)
+        if(user){
+            io.to(user.room).emit("message", formatMessages(defaultUser, `${user.username}  has left the Chat Cord`))
+        }
     })
-})   
+
+})
 
 
 
