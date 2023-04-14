@@ -1,6 +1,6 @@
 # Chat App with Socket.io
 
-![A cute cat](https://www.dropbox.com/s/3rjbbq9v1t6ljau/Screenshot%202023-04-14%20at%202.46.59%20AM.png?dl=0)
+![screenshot](https://www.dropbox.com/s/3rjbbq9v1t6ljau/Screenshot%202023-04-14%20at%202.46.59%20AM.png?dl=0)
 
 
 ## This is a real-time chat application built using Socket.io, Node.js, and Express.
