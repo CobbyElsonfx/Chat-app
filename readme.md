@@ -35,7 +35,7 @@ Features
     Socket.io
     HTML/CSS
 
-## Things I learn during this tutorial
+## Things I learnt during this tutorial
 1. Setting up a connection with Socket.io
    a. Set up a normal express server. 
       i. Require the express  module and save it the variable express
